@@ -10,12 +10,12 @@ This repository including
 - Alias-Free activation @[act.py](/act.py)
 
 - and test codes @[./test](/test)
-- 
-**Note: For  now, only 1d filter and resample is implemented**
+- **Note: For  now, only 1d filter and resample are implemented**
 
 ## TODO
-- [ ] 2d sinc filter, now its 1d filter
+- [ ] 2d sinc filter
 - [ ] 2d resample
+- [ ] devide 1d and 2d modules
 
 ## Test results 
 | Filter sine              | Filter noise                  |
