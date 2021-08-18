@@ -3,7 +3,6 @@
 Simple torch module implementation of [Alias-Free GAN](https://nvlabs.github.io/alias-free-gan/).
 
 This repository including
-
 - Alias-Free GAN style lowpass sinc filter @[filter.py](/filter.py)
 
 - Alias-Free GAN style up/downsample @[resample.py](/resample.py)
@@ -11,8 +10,12 @@ This repository including
 - Alias-Free activation @[act.py](/act.py)
 
 - and test codes @[./test](/test)
+- 
+**Note: For  now, only 1d filter and resample is implemented**
 
-  
+## TODO
+- [ ] 2d sinc filter, now its 1d filter
+- [ ] 2d resample
 
 ## Test results 
 | Filter sine              | Filter noise                  |
