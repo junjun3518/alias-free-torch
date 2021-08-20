@@ -3,8 +3,8 @@ import matplotlib.pyplot as plt
 from ..resample import UpSample2d
 from ..filter import LowPassFilter2d
 
-ratio = 2
-size = 20
+ratio = 8
+size = 40
 t = (torch.stack(torch.meshgrid(
     torch.arange(-size, size) + 0.5,
     torch.arange(-size, size) + 0.5),
@@ -24,7 +24,7 @@ real_up_sin = torch.sin(tt) + torch.sin(tt * 2)
 upsample = UpSample2d(ratio)
 up_sin = (upsample(orig_sin.unsqueeze(0))).squeeze(0)
 
-plt.figure(figsize=(7, 10))
+plt.figure(figsize=(7, 9))
 plt.suptitle(f'upsample x{ratio}')
 plt.subplot(4, 1, 1)
 plt.gca().set_title('original')

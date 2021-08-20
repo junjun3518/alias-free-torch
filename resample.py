@@ -69,3 +69,4 @@ class DownSample2d(nn.Module):
     def forward(self, x):
         xx = self.lowpass(x)
         return xx
+

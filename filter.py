@@ -127,8 +127,8 @@ class LowPassFilter2d(nn.Module):
         if self.pad:
             x = F.pad(x, (self.half_size, self.half_size, self.half_size,
                           self.half_size),
-                      mode='constant',
-                      value=0)
+                      mode='reflect')
+                      #value=0)
 
         out = F.conv2d(x, self.filter, stride=self.stride)[..., :-1, :-1]
         return out.reshape(new_shape)

@@ -2,8 +2,8 @@ import torch
 import matplotlib.pyplot as plt
 from ..resample import DownSample2d
 
-ratio = 2
-size = 20
+ratio = 4
+size = 80
 t = (torch.stack(torch.meshgrid(
     torch.arange(-size, size) + 0.5,
     torch.arange(-size, size) + 0.5),
@@ -21,7 +21,7 @@ downsample = DownSample2d(ratio)
 down_sin = downsample(orig_sin.unsqueeze(0)).squeeze(0)
 print(orig_sin.shape, down_sin.shape, real_down_sin.shape)
 
-plt.figure(figsize=(7, 10))
+plt.figure(figsize=(7, 9))
 plt.suptitle(f'downsample /{ratio}')
 plt.subplot(4, 1, 1)
 plt.gca().set_title('original')
