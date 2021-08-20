@@ -20,8 +20,6 @@ This repository including
 - [x] 2d resample
 - [x] devide 1d and 2d modules
 - [ ] pip packaging
-- [ ] demo like [official page](https://nvlabs.github.io/alias-free-gan/)
-- [ ] 3d or n dim?
 
 ## Test results 1d
 | Filter sine              | Filter noise                  |
@@ -43,6 +41,9 @@ This repository including
 | ![up2d2](asset/up2d2.png) | ![downsample2d2](asset/downsample2d2.png) |
 | ![up2d8](asset/up2d8.png) | ![downsample2d4](asset/downsample2d4.png) |
 
+| Activation             |
+| ---------------------    |
+| ![act](asset/act.png) |
 
 
 ## References
