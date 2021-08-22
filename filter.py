@@ -37,8 +37,7 @@ class LowPassFilter1d(nn.Module):
             beta = 0.
         window = torch.kaiser_window(kernel_size, beta=beta, periodic=False)
         #ratio = 0.5/cutroff
-        time = (torch.arange(-self.half_size, self.half_size) + 0.5) / (
-            0.5 / cutoff)  #*(cutoff*4)
+        time = (torch.arange(-self.half_size, self.half_size) + 0.5) 
         if cutoff == 0:
             filter_ = torch.zeros_like(time)
         else:
@@ -52,7 +51,7 @@ class LowPassFilter1d(nn.Module):
     #input [B,T] or [B,C,T]
     def forward(self, x):
         shape = list(x.shape)
-        new_shape = shape[:-1] + [shape[-1] // self.stride]
+        new_shape = shape[:-1] + [-1]
         x = x.view(-1, 1, shape[-1])
         if self.pad:
             x = F.pad(
@@ -98,7 +97,7 @@ class LowPassFilter2d(nn.Module):
         time = (torch.stack(torch.meshgrid(
             torch.arange(-self.half_size, self.half_size) + 0.5,
             torch.arange(-self.half_size, self.half_size) + 0.5),
-                            dim=-1))  #*(cutoff*4)
+                            dim=-1))  
         time = torch.norm(time, dim=-1)
         #rotation equivariant window
         window = torch.i0(
@@ -121,8 +120,6 @@ class LowPassFilter2d(nn.Module):
     #input [B,C,W,H] or [B,W,H] or [W,H]
     def forward(self, x):
         shape = list(x.shape)
-        new_shape = shape[:-2] + [shape[-2] // self.stride
-                                  ] + [shape[-1] // self.stride]
         x = x.view(-1, 1, shape[-2], shape[-1])
         if self.pad:
             x = F.pad(x, (self.half_size, self.half_size, self.half_size,
@@ -131,4 +128,5 @@ class LowPassFilter2d(nn.Module):
                       #value=0)
 
         out = F.conv2d(x, self.filter, stride=self.stride)[..., :-1, :-1]
+        new_shape = shape[:-2] + list(out.shape)[-2:]
         return out.reshape(new_shape)
