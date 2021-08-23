@@ -15,6 +15,10 @@ This repository including
 
 **Note: 2d lowpass filter is applying sinc instead of jinc (first order Bessel function of the first kind) in paper**
 
+## Requirements
+Due to `torch.kaiser_window` and `torch.i0` are implemeted after `1.7.0`, our repository need `torch>=1.7.0`.
+- Pytorch>=1.7.0
+
 ## TODO
 - [x] 2d sinc filter
 - [x] 2d resample
