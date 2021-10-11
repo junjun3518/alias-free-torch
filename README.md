@@ -11,9 +11,11 @@ This repository including
 
 - and test codes @[./test](/test)
 
-**Note: Since this repository is unofficial, filter and upsample could be different with official implementation.**
+**Note: Since this repository is unofficial, filter and upsample could be different with [official implementation](https://github.com/NVlabs/stylegan3).**
 
 **Note: 2d lowpass filter is applying sinc instead of jinc (first order Bessel function of the first kind) in paper**
+
+**UPDATE: Odd filter is now available**
 
 ## Requirements
 Due to `torch.kaiser_window` and `torch.i0` are implemeted after `1.7.0`, our repository need `torch>=1.7.0`.
