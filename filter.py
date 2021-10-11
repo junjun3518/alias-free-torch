@@ -26,7 +26,8 @@ class LowPassFilter1d(nn.Module):
                  half_width=0.6,
                  stride: int = 1,
                  pad: bool = True,
-                 kernel_size=12):  #kernel_size should be even number
+                 kernel_size=12):  # kernel_size should be even number for stylegan3 setup,
+                                   # in this implementation, odd number is also possible.
         super().__init__()
         if cutoff < -0.:
             raise ValueError("Minimum cutoff must be larger than zero.")
@@ -35,6 +36,7 @@ class LowPassFilter1d(nn.Module):
         self.stride = stride
         self.pad = pad
         self.kernel_size = kernel_size
+        self.even = (kernel_size % 2 == 0)
         self.half_size = kernel_size // 2
         self.stride = stride
 
@@ -49,7 +51,10 @@ class LowPassFilter1d(nn.Module):
             beta = 0.
         window = torch.kaiser_window(kernel_size, beta=beta, periodic=False)
         #ratio = 0.5/cutroff
-        time = (torch.arange(-self.half_size, self.half_size) + 0.5)
+        if self.even:
+            time = (torch.arange(-self.half_size, self.half_size) + 0.5)
+        else:
+            time = torch.arange(self.kernel_size) - self.half_size 
         if cutoff == 0:
             filter_ = torch.zeros_like(time)
         else:
@@ -69,9 +74,12 @@ class LowPassFilter1d(nn.Module):
             x = F.pad(
                 x,
                 (self.half_size, self.half_size),
-                #mode='constant', value=0) if you want
-                mode='replicate')
-        out = F.conv1d(x, self.filter, stride=self.stride)[..., :-1]
+                mode='constant', value=0) # empirically, it is better than replicate
+                #mode='replicate')
+        if self.even:
+            out = F.conv1d(x, self.filter, stride=self.stride)[..., :-1]
+        else:
+            out = F.conv1d(x, self.filter, stride=self.stride)
         return out.reshape(new_shape)
 
 
@@ -81,7 +89,8 @@ class LowPassFilter2d(nn.Module):
                  half_width=0.6,
                  stride: int = 1,
                  pad: bool = True,
-                 kernel_size=12):  #kernel_size should be even number
+                 kernel_size=12):  # kernel_size should be even number
+                                   # in this implementation, odd number is also possible.
         super().__init__()
         if cutoff < -0.:
             raise ValueError("Minimum cutoff must be larger than zero.")
@@ -90,6 +99,7 @@ class LowPassFilter2d(nn.Module):
         self.stride = stride
         self.pad = pad
         self.kernel_size = kernel_size
+        self.even = (kernel_size % 2 == 0)
         self.half_size = kernel_size // 2
         self.stride = stride
 
@@ -104,10 +114,17 @@ class LowPassFilter2d(nn.Module):
             beta = 0.
 
         #rotation equivariant grid
+        if self.even:
         time = (torch.stack(torch.meshgrid(
             torch.arange(-self.half_size, self.half_size) + 0.5,
             torch.arange(-self.half_size, self.half_size) + 0.5),
                             dim=-1))
+        else:
+        time = (torch.stack(torch.meshgrid(
+            torch.arange(self.kernel_size) - self.half_size,
+            torch.arange(self.kernel_size) - self.half_size,
+                            dim=-1))
+
         time = torch.norm(time, dim=-1)
         #rotation equivariant window
         window = torch.i0(
@@ -115,7 +132,6 @@ class LowPassFilter2d(nn.Module):
                               (time / self.half_size / 2**0.5)**2)) / torch.i0(
                                   torch.tensor([beta]))
         #ratio = 0.5/cutroff
-        time = time / (0.5 / cutoff)
         #using sinc instead jinc
         if cutoff == 0:
             filter_ = torch.zeros_like(time)
@@ -134,9 +150,12 @@ class LowPassFilter2d(nn.Module):
         if self.pad:
             x = F.pad(x, (self.half_size, self.half_size, self.half_size,
                           self.half_size),
-                      mode='reflect')
-            #value=0)
+                      mode='constant', value=0) # empirically, it is better than replicate or reflect
+                      #mode='replicate')
+        if self.even:
+            out = F.conv2d(x, self.filter, stride=self.stride)[..., :-1, :-1]
+        else:
+            out = F.conv2d(x, self.filter, stride=self.stride)
 
-        out = F.conv2d(x, self.filter, stride=self.stride)[..., :-1, :-1]
         new_shape = shape[:-2] + list(out.shape)[-2:]
         return out.reshape(new_shape)
