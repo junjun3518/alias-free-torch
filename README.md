@@ -15,17 +15,23 @@ This repository including
 
 **Note: 2d lowpass filter is applying sinc instead of jinc (first order Bessel function of the first kind) in paper**
 
-**UPDATE: Odd filter is now available**
+**UPDATE: You can download alias-free-torch from [pip](https://pypi.org/project/alias-free-torch/)**
+```shell
+python -m pip install alias-free-torch
+```
 
 ## Requirements
 Due to `torch.kaiser_window` and `torch.i0` are implemeted after `1.7.0`, our repository need `torch>=1.7.0`.
 - Pytorch>=1.7.0
 
+For custom torch users, `pip` will not check torch version.
+
 ## TODO
 - [x] 2d sinc filter
 - [x] 2d resample
 - [x] devide 1d and 2d modules
-- [ ] pip packaging
+- [x] pip packaging
+- [ ] documentation
 
 ## Test results 1d
 | Filter sine              | Filter noise                  |
