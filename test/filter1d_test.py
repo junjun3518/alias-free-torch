@@ -1,6 +1,6 @@
 import torch
 import matplotlib.pyplot as plt
-from ..filter import LowPassFilter1d
+from alias_free_torch.filter import LowPassFilter1d
 
 ratio = 2
 t = torch.arange(400) / 40. * 3.141592

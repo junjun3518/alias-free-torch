@@ -1,7 +1,7 @@
 import torch
 import matplotlib.pyplot as plt
-from ..resample import UpSample1d
-from ..filter import LowPassFilter1d
+from alias_free_torch.resample import UpSample1d
+from alias_free_torch.filter import LowPassFilter1d
 
 ratio = 2
 t = torch.arange(100) / 10. * 3.141592

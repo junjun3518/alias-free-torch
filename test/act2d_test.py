@@ -1,8 +1,8 @@
 import torch
 import matplotlib.pyplot as plt
-from ..act import Activation2d
-from ..resample import UpSample2d, DownSample2d
-from ..filter import LowPassFilter2d
+from alias_free_torch.act import Activation2d
+from alias_free_torch.resample import UpSample2d, DownSample2d
+from alias_free_torch.filter import LowPassFilter2d
 import math
 continuous_ratio = 16
 ratio = 2

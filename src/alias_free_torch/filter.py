@@ -6,8 +6,8 @@ import math
 if 'sinc' in dir(torch):
     sinc = torch.sinc
 else:
-# This code is adopted from adefossez's julius.core.sinc
-# https://adefossez.github.io/julius/julius/core.html
+    # This code is adopted from adefossez's julius.core.sinc
+    # https://adefossez.github.io/julius/julius/core.html
     def sinc(x: torch.Tensor):
         """
         Implementation of sinc, i.e. sin(pi * x) / (pi * x)
@@ -26,8 +26,9 @@ class LowPassFilter1d(nn.Module):
                  half_width=0.6,
                  stride: int = 1,
                  pad: bool = True,
-                 kernel_size=12):  # kernel_size should be even number for stylegan3 setup,
-                                   # in this implementation, odd number is also possible.
+                 kernel_size=12
+                 ):  # kernel_size should be even number for stylegan3 setup,
+        # in this implementation, odd number is also possible.
         super().__init__()
         if cutoff < -0.:
             raise ValueError("Minimum cutoff must be larger than zero.")
@@ -54,7 +55,7 @@ class LowPassFilter1d(nn.Module):
         if self.even:
             time = (torch.arange(-self.half_size, self.half_size) + 0.5)
         else:
-            time = torch.arange(self.kernel_size) - self.half_size 
+            time = torch.arange(self.kernel_size) - self.half_size
         if cutoff == 0:
             filter_ = torch.zeros_like(time)
         else:
@@ -71,11 +72,10 @@ class LowPassFilter1d(nn.Module):
         new_shape = shape[:-1] + [-1]
         x = x.view(-1, 1, shape[-1])
         if self.pad:
-            x = F.pad(
-                x,
-                (self.half_size, self.half_size),
-                mode='constant', value=0) # empirically, it is better than replicate
-                #mode='replicate')
+            x = F.pad(x, (self.half_size, self.half_size),
+                      mode='constant',
+                      value=0)  # empirically, it is better than replicate
+            #mode='replicate')
         if self.even:
             out = F.conv1d(x, self.filter, stride=self.stride)[..., :-1]
         else:
@@ -90,7 +90,7 @@ class LowPassFilter2d(nn.Module):
                  stride: int = 1,
                  pad: bool = True,
                  kernel_size=12):  # kernel_size should be even number
-                                   # in this implementation, odd number is also possible.
+        # in this implementation, odd number is also possible.
         super().__init__()
         if cutoff < -0.:
             raise ValueError("Minimum cutoff must be larger than zero.")
@@ -115,15 +115,15 @@ class LowPassFilter2d(nn.Module):
 
         #rotation equivariant grid
         if self.even:
-        time = (torch.stack(torch.meshgrid(
-            torch.arange(-self.half_size, self.half_size) + 0.5,
-            torch.arange(-self.half_size, self.half_size) + 0.5),
-                            dim=-1))
+            time = torch.stack(torch.meshgrid(
+                torch.arange(-self.half_size, self.half_size) + 0.5,
+                torch.arange(-self.half_size, self.half_size) + 0.5),
+                               dim=-1)
         else:
-        time = (torch.stack(torch.meshgrid(
-            torch.arange(self.kernel_size) - self.half_size,
-            torch.arange(self.kernel_size) - self.half_size,
-                            dim=-1))
+            time = torch.stack(torch.meshgrid(
+                torch.arange(self.kernel_size) - self.half_size,
+                torch.arange(self.kernel_size) - self.half_size),
+                               dim=-1)
 
         time = torch.norm(time, dim=-1)
         #rotation equivariant window
@@ -148,10 +148,12 @@ class LowPassFilter2d(nn.Module):
         shape = list(x.shape)
         x = x.view(-1, 1, shape[-2], shape[-1])
         if self.pad:
-            x = F.pad(x, (self.half_size, self.half_size, self.half_size,
-                          self.half_size),
-                      mode='constant', value=0) # empirically, it is better than replicate or reflect
-                      #mode='replicate')
+            x = F.pad(
+                x, (self.half_size, self.half_size, self.half_size,
+                    self.half_size),
+                mode='constant',
+                value=0)  # empirically, it is better than replicate or reflect
+            #mode='replicate')
         if self.even:
             out = F.conv2d(x, self.filter, stride=self.stride)[..., :-1, :-1]
         else:

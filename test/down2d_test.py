@@ -1,6 +1,6 @@
 import torch
 import matplotlib.pyplot as plt
-from ..resample import DownSample2d
+from alias_free_torch.resample import DownSample2d
 
 ratio = 4
 size = 80

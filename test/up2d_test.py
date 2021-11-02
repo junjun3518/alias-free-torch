@@ -1,7 +1,7 @@
 import torch
 import matplotlib.pyplot as plt
-from ..resample import UpSample2d
-from ..filter import LowPassFilter2d
+from alias_free_torch.resample import UpSample2d
+from alias_free_torch.filter import LowPassFilter2d
 
 ratio = 8
 size = 40

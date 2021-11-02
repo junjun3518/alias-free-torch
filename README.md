@@ -3,13 +3,13 @@
 Simple torch module implementation of [Alias-Free GAN](https://nvlabs.github.io/alias-free-gan/).
 
 This repository including
-- Alias-Free GAN style lowpass sinc filter @[filter.py](/filter.py)
+- Alias-Free GAN style lowpass sinc filter @[filter.py](/src/alias_free_torch/filter.py)
 
-- Alias-Free GAN style up/downsample @[resample.py](/resample.py)
+- Alias-Free GAN style up/downsample @[resample.py](/src/alias_free_torch/resample.py)
 
-- Alias-Free activation @[act.py](/act.py)
+- Alias-Free activation @[act.py](/src/alias_free_torch/act.py)
 
-- and test codes @[./test](/test)
+- and test codes @[./test](/src/alias_free_torch/test)
 
 **Note: Since this repository is unofficial, filter and upsample could be different with [official implementation](https://github.com/NVlabs/stylegan3).**
 

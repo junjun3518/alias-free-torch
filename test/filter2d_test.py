@@ -1,6 +1,6 @@
 import torch
 import matplotlib.pyplot as plt
-from ..filter import LowPassFilter2d
+from alias_free_torch.filter import LowPassFilter2d
 
 ratio = 2
 
