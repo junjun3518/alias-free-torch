@@ -1,6 +1,6 @@
 import torch
 import matplotlib.pyplot as plt
-from alias_free_torch.resample import DownSample1d
+from src.alias_free_torch.resample import DownSample1d
 
 ratio = 10
 t = torch.arange(100) / 100. * 3.141592

@@ -1,7 +1,7 @@
 import torch
 import matplotlib.pyplot as plt
-from alias_free_torch.resample import UpSample2d
-from alias_free_torch.filter import LowPassFilter2d
+from src.alias_free_torch.resample import UpSample2d
+from src.alias_free_torch.filter import LowPassFilter2d
 
 ratio = 8
 size = 40
@@ -16,13 +16,12 @@ tt = (torch.stack(torch.meshgrid(
                   dim=-1)) / size / ratio * 2 * 3.141592
 tt = torch.norm(tt, dim=-1, p=1)
 
-#low = LowPassFilter1d(cutoff = 0.5/ratio/ratio,
-#                    half_width = 0.6/ratio/ratio)
 
-orig_sin = torch.sin(t) + torch.sin(t * 2)
-real_up_sin = torch.sin(tt) + torch.sin(tt * 2)
+orig_sin = torch.sin(t) + torch.sin(2*t)
+real_up_sin = torch.sin(tt) + torch.sin(2*tt)
 upsample = UpSample2d(ratio)
-up_sin = (upsample(orig_sin.unsqueeze(0))).squeeze(0)
+#print(upsample(orig_sin.view(1,1,*orig_sin.shape)).shape)
+up_sin = upsample(orig_sin.view(1,1,*orig_sin.shape)).view(2*size*ratio,2*size*ratio)
 
 plt.figure(figsize=(7, 9))
 plt.suptitle(f'upsample x{ratio}')

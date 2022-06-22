@@ -1,9 +1,9 @@
 import torch
 import matplotlib.pyplot as plt
-from alias_free_torch.resample import UpSample1d
-from alias_free_torch.filter import LowPassFilter1d
+from src.alias_free_torch.resample import UpSample1d
+from src.alias_free_torch.filter import LowPassFilter1d
 
-ratio = 2
+ratio = 256
 t = torch.arange(100) / 10. * 3.141592
 tt = torch.arange(100 * ratio) / (10. * ratio) * 3.141592
 #low = LowPassFilter1d(cutoff = 0.5/ratio/ratio,
@@ -12,8 +12,7 @@ tt = torch.arange(100 * ratio) / (10. * ratio) * 3.141592
 orig_sin = torch.sin(t) + torch.sin(t * 2)
 real_up_sin = torch.sin(tt) + torch.sin(tt * 2)
 upsample = UpSample1d(ratio)
-print(upsample.lowpass.filter)
-up_sin = (upsample(orig_sin))
+up_sin = (upsample(orig_sin.view(1,1,100))).view(100*ratio)
 #up_sin = low(upsample(orig_sin))
 
 plt.figure(figsize=(7, 5))

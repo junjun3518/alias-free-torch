@@ -1,13 +1,13 @@
 import torch
 import matplotlib.pyplot as plt
-from alias_free_torch.act import Activation2d
-from alias_free_torch.resample import UpSample2d, DownSample2d
-from alias_free_torch.filter import LowPassFilter2d
+from src.alias_free_torch.act import Activation2d
+from src.alias_free_torch.resample import UpSample2d, DownSample2d
+from src.alias_free_torch.filter import LowPassFilter2d
 import math
 continuous_ratio = 16
 ratio = 2
 size = 256
-center = [0, 1.5 + step / 5.]
+center = [0, 1.5 + 10 / 5.]
 t = (torch.stack(torch.meshgrid(
     (torch.arange(-size, size) - center[0]) / size,
     (torch.arange(-size, size) - center[1]) / size),

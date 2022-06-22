@@ -1,8 +1,8 @@
 import torch
 import matplotlib.pyplot as plt
-from alias_free_torch.resample import DownSample2d
+from src.alias_free_torch.resample import DownSample2d
 
-ratio = 4
+ratio = 2
 size = 80
 t = (torch.stack(torch.meshgrid(
     torch.arange(-size, size) + 0.5,
