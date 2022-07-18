@@ -18,14 +18,15 @@ else:
                            torch.sin(math.pi * x) / math.pi / x)
 
 
-if 'i1' in dir(torch.special):
+if 'special' in dir(torch) and 'i1' in dir(torch.special):
     i1 = torch.speical.i1
 
     def jinc(x: torch.Tensor):
         return torch.where(
             x == 0, torch.tensor(0.25 / math.pi,
                                  device=x.device,
-                                 dtype=x.dtype), 1 / (2 * math.pi * x) * i1(x))
+                                 dtype=x.dtype),
+            1 / (2 * math.pi * x) * i1(x))
 else:
     jinc = sinc
 

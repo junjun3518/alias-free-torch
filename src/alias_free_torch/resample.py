@@ -18,8 +18,9 @@ class UpSample1d(nn.Module):
                                            kernel_size=kernel_size)
 
     def forward(self, x):
+        x = F.pad(x, (self.pad, self.pad), mode = 'reflect')
         x = self.ratio * F.conv_transpose1d(
-            x, self.filter, stride=self.stride, padding=self.pad)
+            x, self.filter, stride=self.stride)
         if not self.even:
             x = x[..., :-1]
         return x
@@ -52,12 +53,11 @@ class UpSample2d(nn.Module):
                                            kernel_size=kernel_size)
 
     def forward(self, x):
-        print(x.shape)
+        x = F.pad(x, (self.pad, self.pad), mode = 'reflect')
         x = self.ratio**2 * F.conv_transpose2d(
-            x, self.filter, stride=self.stride, padding=self.pad)
+            x, self.filter, stride=self.stride)
         if not self.even:
             x = x[..., :-1, :-1]
-        print(x.shape)
         return x
 
 

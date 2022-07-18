@@ -31,10 +31,10 @@ For custom torch users, `pip` will not check torch version.
 - [x] 2d resample
 - [x] devide 1d and 2d modules
 - [x] pip packaging
-- [ ] documentation
 - [x] rewrite upsample
 - [x] apply jinc(torch.special.i1) with updated torch
-
+- [ ] provide loadable ckpt for lower version of torch
+- [ ] documentation
 ## Test results 1d
 | Filter sine              | Filter noise                  |
 | --------------------- | --------------------------- |
