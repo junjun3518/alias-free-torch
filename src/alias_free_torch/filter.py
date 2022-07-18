@@ -19,7 +19,7 @@ else:
 
 
 if 'special' in dir(torch) and 'i1' in dir(torch.special):
-    i1 = torch.speical.i1
+    i1 = torch.special.i1
 
     def jinc(x: torch.Tensor):
         return torch.where(
