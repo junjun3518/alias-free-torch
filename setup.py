@@ -6,7 +6,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name                = 'alias_free_torch',
-    version             = '0.0.3',
+    version             = '0.0.4',
     description         = 'alias free torch',
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -21,9 +21,6 @@ setup(
     zip_safe            = False,
     classifiers         = [
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.2',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
         'Programming Language :: Python :: 3.7',
