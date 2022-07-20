@@ -34,8 +34,9 @@ For custom torch users, `pip` will not check torch version.
 - [x] rewrite upsample
 - [x] apply jinc(torch.special.i1) with updated torch
 - [x] Upsample pad size issue
-- [x] support calculation for \[B,C,T/(H,W)\] (now only supports \[B,T/(H,W)\] or \[B,1,T/(H,W)\])
+- [x] \(Upsample\) support calculation for \[B,C,T/(H,W)\] (now only supports \[B,T/(H,W)\] or \[B,1,T/(H,W)\])
 - [x] set filter as register buffer
+- [ ] \(Downsample\) support calculation for \[B,C,T/(H,W)\] (now only supports \[B,T/(H,W)\] or \[B,1,T/(H,W)\])
 - [ ] provide loadable ckpt for lower version of torch
 - [ ] documentation
 ## Test results 1d
