@@ -25,8 +25,7 @@ if 'special' in dir(torch) and 'i1' in dir(torch.special):
         return torch.where(
             x == 0, torch.tensor(0.25 / math.pi,
                                  device=x.device,
-                                 dtype=x.dtype),
-            1 / (2 * math.pi * x) * i1(x))
+                                 dtype=x.dtype), 1 / (2 * math.pi * x) * i1(x))
 else:
     jinc = sinc
 
@@ -66,12 +65,14 @@ def kaiser_sinc_filter1d(cutoff, half_width, kernel_size):
 
 
 class LowPassFilter1d(nn.Module):
+
     def __init__(self,
                  cutoff=0.5,
                  half_width=0.6,
                  stride: int = 1,
-                 pad: bool = True,
-                 kernel_size=12
+                 padding: bool: True,
+                 padding_mode: str = 'constant',
+                 kernel_size: int = 12
                  ):  # kernel_size should be even number for stylegan3 setup,
         # in this implementation, odd number is also possible.
         super().__init__()
@@ -81,28 +82,22 @@ class LowPassFilter1d(nn.Module):
             raise ValueError("A cutoff above 0.5 does not make sense.")
         self.kernel_size = kernel_size
         self.even = (kernel_size % 2 == 0)
-        self.half_size = kernel_size // 2
+        self.left_pad = kernel_size // 2
+        self.right_pad = self.left_pad - int(self.even)
         self.stride = stride
-        self.pad = pad
-
+        self.pad = padding
+        self.padding_mode = padding_mode
         filter = kaiser_sinc_filter1d(cutoff, half_width, kernel_size)
         self.register_buffer("filter", filter)
 
-    #input [B,T] or [B,C,T]
+    #input [B,C,T]
     def forward(self, x):
-        shape = list(x.shape)
-        new_shape = shape[:-1] + [-1]
-        x = x.view(-1, 1, shape[-1])
+        C = x.shape[1]
         if self.pad:
-            x = F.pad(x, (self.half_size, self.half_size),
-                      mode='constant',
-                      value=0)  # empirically, it is better than replicate
-            #mode='replicate')
-
-        out = F.conv1d(x, self.filter, stride=self.stride)
-        if self.even:
-            out = out[..., :-1]
-        return out.reshape(new_shape)
+            x = F.pad(x, (self.left_pad, self.right_pad),
+                      mode=self.padding_mode)
+        out = F.conv1d(x, self.filter, stride=self.stride, groupds=C)
+        return out
 
 
 def kaiser_jinc_filter2d(cutoff, half_width, kernel_size):
@@ -148,11 +143,13 @@ def kaiser_jinc_filter2d(cutoff, half_width, kernel_size):
 
 
 class LowPassFilter2d(nn.Module):
+
     def __init__(self,
                  cutoff=0.5,
                  half_width=0.6,
                  stride: int = 1,
-                 pad: bool = True,
+                 padding: bool = True,
+                 padding_mode: str = 'constant',
                  kernel_size=12):  # kernel_size should be even number
         # in this implementation, odd number is also possible.
         super().__init__()
@@ -162,26 +159,22 @@ class LowPassFilter2d(nn.Module):
             raise ValueError("A cutoff above 0.5 does not make sense.")
         self.kernel_size = kernel_size
         self.even = (kernel_size % 2 == 0)
-        self.half_size = kernel_size // 2
+        self.left_pad = kernel_size // 2
+        self.right_pad = self.left_pad - int(self.even)
         self.stride = stride
-        self.pad = pad
-
+        self.padding = padding
+        self.padding_mode = padding_mode
         filter = kaiser_jinc_filter2d(cutoff, half_width, kernel_size)
         self.register_buffer("filter", filter)
 
-    #input [B,C,W,H] or [B,W,H] or [W,H]
+    #input [B,C,W,H]
     def forward(self, x):
-        shape = list(x.shape)
-        x = x.view(-1, 1, shape[-2], shape[-1])
+        C = x.shape[1]
         if self.pad:
             x = F.pad(
-                x, (self.half_size, self.half_size, self.half_size,
-                    self.half_size),
-                mode='constant',
-                value=0)  # empirically, it is better than replicate or reflect
-            #mode='replicate')
-        out = F.conv2d(x, self.filter, stride=self.stride)
-        if self.even:
-            out = out[..., :-1, :-1]
-        new_shape = shape[:-2] + list(out.shape)[-2:]
-        return out.reshape(new_shape)
+                x,
+                (self.left_pad, self.right_pad, self.left_pad, self.right_pad),
+                mode=self.padding_mode,
+            )
+        out = F.conv2d(x, self.filter, stride=self.stride, groups=C)
+        return out
