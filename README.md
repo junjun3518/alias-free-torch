@@ -1,6 +1,6 @@
 # Alias-Free-Torch
 
-Simple torch module implementation of [Alias-Free GAN](https://nvlabs.github.io/alias-free-gan/).
+Simple *torch* module implementation of [Alias-Free GAN](https://nvlabs.github.io/alias-free-gan/).
 
 This repository including
 - Alias-Free GAN style lowpass sinc filter @[filter.py](/src/alias_free_torch/filter.py)
@@ -13,12 +13,13 @@ This repository including
 
 **Note: Since this repository is unofficial, filter and upsample could be different with [official implementation](https://github.com/NVlabs/stylegan3).**
 
-**Note: 2d lowpass filter is applying sinc instead of jinc (first order Bessel function of the first kind) in paper**
+**Still working! If you notice some error or typo, please open new issue!**
 
-**UPDATE: You can download alias-free-torch from [pip](https://pypi.org/project/alias-free-torch/)**
+**UPDATE: You can download alias-free-torch from [pip](https://pypi.org/project/alias-free-torch/)** 
 ```shell
 python -m pip install alias-free-torch
 ```
+
 
 ## Requirements
 Due to `torch.kaiser_window` and `torch.i0` are implemeted after `1.7.0`, our repository need `torch>=1.7.0`.
@@ -32,13 +33,13 @@ For custom torch users, `pip` will not check torch version.
 - [x] devide 1d and 2d modules
 - [x] pip packaging
 - [x] rewrite upsample
-- [x] apply jinc(torch.special.i1) with updated torch
 - [x] Upsample pad size issue
 - [x] \(Upsample\) support calculation for \[B,C,T/(H,W)\] (now only supports \[B,T/(H,W)\] or \[B,1,T/(H,W)\])
 - [x] set filter as register buffer
-- [ ] \(Downsample\) support calculation for \[B,C,T/(H,W)\] (now only supports \[B,T/(H,W)\] or \[B,1,T/(H,W)\])
+- [x] \(Downsample & Filter\) support calculation for \[B,C,T/(H,W)\] (now only supports \[B,T/(H,W)\] or \[B,1,T/(H,W)\])
 - [ ] provide loadable ckpt for lower version of torch
 - [ ] documentation
+
 ## Test results 1d
 | Filter sine              | Filter noise                  |
 | --------------------- | --------------------------- |
@@ -58,11 +59,6 @@ For custom torch users, `pip` will not check torch version.
 | --------------------- | --------------------------- |
 | ![up2d2](asset/up2d2.png) | ![downsample2d2](asset/downsample2d2.png) |
 | ![up2d8](asset/up2d8.png) | ![downsample2d4](asset/downsample2d4.png) |
-
-| Activation             |
-| ---------------------    |
-| ![act](asset/act.png) |
-
 
 ## References
 

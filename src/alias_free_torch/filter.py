@@ -71,8 +71,8 @@ class LowPassFilter1d(nn.Module):
             raise ValueError("A cutoff above 0.5 does not make sense.")
         self.kernel_size = kernel_size
         self.even = (kernel_size % 2 == 0)
-        self.left_pad = kernel_size // 2 - int(self.even)
-        self.right_pad = kernel_size // 2
+        self.pad_left = kernel_size // 2 - int(self.even)
+        self.pad_right = kernel_size // 2
         self.stride = stride
         self.padding = padding
         self.padding_mode = padding_mode
@@ -81,11 +81,12 @@ class LowPassFilter1d(nn.Module):
 
     #input [B,C,T]
     def forward(self, x):
-        C = x.shape[1]
+        _, C, _ = x.shape
         if self.padding:
-            x = F.pad(x, (self.left_pad, self.right_pad),
+            x = F.pad(x, (self.pad_left, self.pad_right),
                       mode=self.padding_mode)
-        out = F.conv1d(x, self.filter, stride=self.stride, groupds=C)
+        out = F.conv1d(x, self.filter.expand(C, -1, -1),
+                       stride=self.stride, groupds=C)
         return out
 
 
@@ -107,12 +108,12 @@ def kaiser_sinc_filter2d(cutoff, half_width, kernel_size):
         time = torch.stack(torch.meshgrid(
             torch.arange(-half_size, half_size) + 0.5,
             torch.arange(-half_size, half_size) + 0.5),
-                           dim=-1)
+            dim=-1)
     else:
         time = torch.stack(torch.meshgrid(
             torch.arange(kernel_size) - half_size,
             torch.arange(kernel_size) - half_size),
-                           dim=-1)
+            dim=-1)
 
     time = torch.norm(time, dim=-1)
     #rotation equivariant window
@@ -149,8 +150,8 @@ class LowPassFilter2d(nn.Module):
             raise ValueError("A cutoff above 0.5 does not make sense.")
         self.kernel_size = kernel_size
         self.even = (kernel_size % 2 == 0)
-        self.left_pad = kernel_size // 2 - int(self.even)
-        self.right_pad = kernel_size // 2
+        self.pad_left = kernel_size // 2 - int(self.even)
+        self.pad_right = kernel_size // 2
         self.stride = stride
         self.padding = padding
         self.padding_mode = padding_mode
@@ -159,12 +160,13 @@ class LowPassFilter2d(nn.Module):
 
     #input [B,C,W,H]
     def forward(self, x):
-        C = x.shape[1]
+        _, C, _, _ = x.shape
         if self.pad:
             x = F.pad(
                 x,
-                (self.left_pad, self.right_pad, self.left_pad, self.right_pad),
+                (self.pad_left, self.pad_right, self.pad_left, self.pad_right),
                 mode=self.padding_mode,
             )
-        out = F.conv2d(x, self.filter, stride=self.stride, groups=C)
+        out = F.conv2d(x, self.filter.expand(C, -1, -1, -1),
+                       stride=self.stride, groups=C)
         return out
