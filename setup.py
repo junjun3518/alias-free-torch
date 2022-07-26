@@ -6,7 +6,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 
 setup(
     name                = 'alias_free_torch',
-    version             = '0.0.8',
+    version             = '0.0.6',
     description         = 'alias free torch',
     long_description=long_description,
     long_description_content_type="text/markdown",
