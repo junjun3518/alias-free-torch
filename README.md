@@ -14,7 +14,8 @@ This repository including
 **Note: Since this repository is unofficial, filter and upsample could be different with [official implementation](https://github.com/NVlabs/stylegan3).**
 
 **Still working! If you notice some error or typo, please open new issue!**
-**v0.0.8 is TESTED**
+
+**v0.0.6 is TESTED**
 
 **UPDATE: You can download alias-free-torch from [pip](https://pypi.org/project/alias-free-torch/)** 
 ```shell
