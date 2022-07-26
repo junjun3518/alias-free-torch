@@ -15,7 +15,7 @@ t = (torch.stack(torch.meshgrid(
 
 t = torch.sin(torch.cos(torch.norm(t, dim=-1, p=2))) #+ 0.01 * torch.cos(        (torch.arange(-size, size) - center[1]) / 1.5 * math.pi).unsqueeze(0)
 act = Activation2d(torch.nn.Sigmoid(), ratio, ratio)
-act_t = act(15 * t.unsqueeze(0)).squeeze(0)
+act_t = act(15 * t.unsqueeze(0).unsqueeze(0)).squeeze(0).squeeze(0)
 upsample = UpSample2d(ratio=ratio * ratio)
 downsample = DownSample2d(ratio=ratio)
 low = LowPassFilter2d(0.5 / ratio,
@@ -34,7 +34,7 @@ plt.gca().axis('off')
 plt.tight_layout()
 plt.subplot(2, 3, 3)
 plt.pcolor(low(
-    (torch.sigmoid(15 * t.unsqueeze(0)).squeeze(0))).numpy(),
+    torch.sigmoid(15 * t.unsqueeze(0).unsqueeze(0))).squeeze(0).squeeze(0).numpy(),
            vmin=-1.2,
            vmax=1.2)
 plt.gca().axis('off')
@@ -56,7 +56,7 @@ plt.tight_layout()
 plt.subplot(2, 3, 6)
 plt.pcolor((downsample(
     torch.sigmoid(15 * upsample(
-        (t[::ratio, ::ratio].unsqueeze(0)))))).squeeze(0).numpy(),
+        (t[::ratio, ::ratio].unsqueeze(0).unsqueeze(0)))))).squeeze(0).squeeze(0).numpy(),
            vmin=-1.2,
            vmax=1.2)
 plt.gca().axis('off')

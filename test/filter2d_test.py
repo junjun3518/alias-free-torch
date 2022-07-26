@@ -1,6 +1,6 @@
 import torch
 import matplotlib.pyplot as plt
-from alias_free_torch.filter import LowPassFilter2d
+from src.alias_free_torch.filter import LowPassFilter2d
 
 ratio = 2
 
@@ -15,7 +15,7 @@ low = LowPassFilter2d(cutoff=1 / ratio, half_width=0.6 / ratio)
 #orig_sin = torch.sin(t) +0.01 *torch.randn_like(t) + torch.cos(t * 2)
 orig_sin = 0.5 * torch.randn_like(t)
 
-filter_sin = low(orig_sin)
+filter_sin = low(orig_sin.unsqueeze(0).unsqueeze(0)).squeeze(0).squeeze(0)
 plt.figure(figsize=(7, 9))
 plt.suptitle(f'filter cutoff{1/ratio}')
 plt.subplot(3, 1, 1)

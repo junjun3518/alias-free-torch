@@ -8,19 +8,18 @@ t = (torch.stack(torch.meshgrid(
     torch.arange(-size, size) + 0.5,
     torch.arange(-size, size) + 0.5),
                  dim=-1)) / size * 2 * 3.141592
-t = torch.norm(t, dim=-1, p=1)
+t = torch.norm(t, dim=-1, p=1).unsqueeze(0).unsqueeze(0)
 tt = (torch.stack(torch.meshgrid(
     torch.arange(-size // ratio, size // ratio) + 0.5,
     torch.arange(-size // ratio, size // ratio) + 0.5),
                   dim=-1)) / size * ratio * 2 * 3.141592
-tt = torch.norm(tt, dim=-1, p=1)
+tt = torch.norm(tt, dim=-1, p=1).unsqueeze(0).unsqueeze(0)
 
 orig_sin = torch.sin(t) + torch.sin(t * 2)
-real_down_sin = torch.sin(tt) + torch.sin(tt * 2)
+real_down_sin = (torch.sin(tt) + torch.sin(tt * 2)).squeeze(0).squeeze(0)
 downsample = DownSample2d(ratio)
-down_sin = downsample(orig_sin.unsqueeze(0)).squeeze(0)
-print(orig_sin.shape, down_sin.shape, real_down_sin.shape)
-
+down_sin = downsample(orig_sin).squeeze(0).squeeze(0)
+orig_sin = orig_sin.squeeze(0).squeeze(0)
 plt.figure(figsize=(7, 9))
 plt.suptitle(f'downsample /{ratio}')
 plt.subplot(4, 1, 1)

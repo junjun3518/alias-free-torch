@@ -1,13 +1,13 @@
 import torch
 import matplotlib.pyplot as plt
-from alias_free_torch.filter import LowPassFilter1d
+from src.alias_free_torch.filter import LowPassFilter1d
 
 ratio = 2
 t = torch.arange(400) / 40. * 3.141592
 low = LowPassFilter1d(cutoff=1 / ratio, half_width=0.6 / ratio)
 
 #orig_sin = torch.sin(t) +torch.sin(t*10)
-orig_sin = torch.randn(400)
+orig_sin = torch.randn(400).view(1,1,-1)
 filter_sin = low(orig_sin)
 
 plt.figure(figsize=(7, 5))

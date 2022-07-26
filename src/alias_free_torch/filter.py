@@ -60,7 +60,7 @@ class LowPassFilter1d(nn.Module):
                  half_width=0.6,
                  stride: int = 1,
                  padding: bool = True,
-                 padding_mode: str = 'constant',
+                 padding_mode: str = 'replicate',
                  kernel_size: int = 12):
         # kernel_size should be even number for stylegan3 setup,
         # in this implementation, odd number is also possible.
@@ -86,7 +86,7 @@ class LowPassFilter1d(nn.Module):
             x = F.pad(x, (self.pad_left, self.pad_right),
                       mode=self.padding_mode)
         out = F.conv1d(x, self.filter.expand(C, -1, -1),
-                       stride=self.stride, groupds=C)
+                       stride=self.stride, groups=C)
         return out
 
 
@@ -139,7 +139,7 @@ class LowPassFilter2d(nn.Module):
                  half_width=0.6,
                  stride: int = 1,
                  padding: bool = True,
-                 padding_mode: str = 'constant',
+                 padding_mode: str = 'replicate',
                  kernel_size: int = 12):
         # kernel_size should be even number for stylegan3 setup,
         # in this implementation, odd number is also possible.
@@ -161,7 +161,7 @@ class LowPassFilter2d(nn.Module):
     #input [B,C,W,H]
     def forward(self, x):
         _, C, _, _ = x.shape
-        if self.pad:
+        if self.padding:
             x = F.pad(
                 x,
                 (self.pad_left, self.pad_right, self.pad_left, self.pad_right),
